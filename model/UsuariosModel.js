@@ -1,18 +1,93 @@
 const db = require("../config/database");
 
-const criarUsario = async (
-
+const criarUsuario = async (
     nome,
+    email,
+    telefone,
+    cep,
+    endereco,
+    numero,
+    complemento,
+    bairro,
+    cidade,
+    estado,
     login,
     senha
 ) => {
-    const sql = `INSERT INTO
-                  usuarios(nome,login,senha)
-                 VALUES(?,?,?)`;
-    
-    const [resultado] = await db.execute(sql, [nome, login, senha]);
-    return resultado;            
 
+    const sql = `
+        INSERT INTO usuarios 
+        (
+            nome,
+            email,
+            telefone,
+            cep,
+            endereco,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            login,
+            senha
+        )
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+    `;
+    const [resultado] = await db.execute(sql, [
+        nome,
+        email,
+        telefone,
+        cep,
+        endereco,
+        numero,
+        complemento,
+        bairro,
+        cidade,
+        estado,
+        login,
+        senha
+    ]);
+    
+    return resultado;
+};
+
+const buscarUSuarios = async () => {
+
+    const sql = `
+        SELECT
+            id_usuario,
+            nome,
+            email,
+            telefone,
+            cep,
+            endereco,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            login
+        FROM usuarios
+    `;
+    const [usuarios] = await db.execute(sql);
+
+    return usuarios;
 }
 
+    const sql = `
+        SELECT *
+        FROM usuarios
+        WHERE login = ?
+    `;
 
+    const [usuarios] = await db.execute(sql, [login]);
+
+    return usuarios[0];
+};
+
+
+module.exports = {
+    criarUsuario,
+    buscarUsuarios,
+    buscarPorLogin
+};
